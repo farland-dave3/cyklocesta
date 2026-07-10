@@ -9,19 +9,23 @@ Usage: python3 pipeline/install_hooks.py
 
 import shutil
 import stat
-import subprocess
 import sys
 from pathlib import Path
 
 
 def repo_root():
-    out = subprocess.run(
-        ["git", "rev-parse", "--show-toplevel"],
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    return Path(out.stdout.strip())
+    # This file lives at <repo>/pipeline/install_hooks.py, so the repo
+    # root is two levels up. Deriving it from __file__ (instead of
+    # shelling out to `git rev-parse`) means no dependency on a `git`
+    # CLI on PATH — the Windows maintainer uses GitHub Desktop, which
+    # bundles git but does not expose it, so `git ...` raises WinError 2.
+    root = Path(__file__).resolve().parent.parent
+    if not (root / ".git").exists():
+        raise FileNotFoundError(
+            f"not a git repo (no .git found at {root}) — run this from "
+            "inside the cloned cyklocesta repository"
+        )
+    return root
 
 
 def install():

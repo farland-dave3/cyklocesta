@@ -5,4 +5,17 @@
 # un-whitelisted GPX shape. See pipeline/privacy_gate.py for the logic.
 set -e
 REPO_ROOT=$(git rev-parse --show-toplevel)
-exec python3 "$REPO_ROOT/pipeline/privacy_gate.py" --staged
+# Pick a Python 3 interpreter. Windows (GitHub Desktop's bundled sh)
+# usually has `python` or the `py` launcher but NOT `python3`, so a
+# hard-coded `python3` would block every commit with "not found".
+if command -v python3 >/dev/null 2>&1; then
+    PY=python3
+elif command -v python >/dev/null 2>&1; then
+    PY=python
+elif command -v py >/dev/null 2>&1; then
+    PY="py -3"
+else
+    echo "pre-commit: no Python interpreter found on PATH" >&2
+    exit 1
+fi
+exec $PY "$REPO_ROOT/pipeline/privacy_gate.py" --staged
