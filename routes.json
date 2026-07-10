@@ -1,0 +1,48 @@
+{
+  "routes": [
+    {
+      "slug": "2026-07-06-vylet-okolo-rybnika",
+      "file": "2026-07-06 Výlet okolo Rybníka.gpx",
+      "name": "Výlet okolo Rybníka",
+      "date": "2026-07-06",
+      "distance_km": 25.6,
+      "elevation_m": 624,
+      "pin": [
+        49.52194,
+        12.67574
+      ],
+      "bbox": [
+        [
+          49.52194,
+          12.58272
+        ],
+        [
+          49.5688,
+          12.67592
+        ]
+      ]
+    },
+    {
+      "slug": "2026-06-08-kolem-velkeho-darka",
+      "file": "2026-06-08 Kolem Velkého Dářka.gpx",
+      "name": "Kolem Velkého Dářka",
+      "date": "2026-06-08",
+      "distance_km": 41.3,
+      "elevation_m": 328,
+      "pin": [
+        49.63186,
+        15.90178
+      ],
+      "bbox": [
+        [
+          49.61211,
+          15.78437
+        ],
+        [
+          49.69943,
+          15.90205
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+# === PRIVACY CRUX: never let an untrimmed GPX reach public git history ===
+# Whitelist model: ignore ALL .gpx everywhere, then force-allow ONLY the
+# published, trimmed dir. A GPX dropped anywhere else can never be staged.
+*.gpx
+!gpx/
+!gpx/*.gpx
+
+# Untrimmed source + processed originals — hold real home coordinates.
+raw/
+done/
+
+# Secrets — the dev Mapy key lives in config.local.js (never committed).
+# config.js IS committed: it holds only the referrer-locked prod key, which
+# is safe in a public repo (see CLAUDE.md "Secrets" + open-questions #2).
+config.local.js
+privacy-zones.json
+
+# Logs — Route Manager tracebacks can contain paths + coordinates.
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Node / Playwright
+node_modules/
+test-results/
+playwright-report/
+.playwright/
+
+# PySide6 / packaging
+build/
+dist/
+*.spec
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

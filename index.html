@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Cyklocesta</title>
+
+<link rel="stylesheet" href="lib/leaflet/leaflet.css">
+<link rel="stylesheet" href="lib/markercluster/MarkerCluster.css">
+<link rel="stylesheet" href="lib/markercluster/MarkerCluster.Default.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <a href="#" id="home-link" class="site-logo" aria-label="Back to map overview">
+    <svg class="logo-wheel" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+        <!-- spokes -->
+        <line x1="16" y1="16" x2="27" y2="16"/>
+        <line x1="16" y1="16" x2="23.78" y2="23.78"/>
+        <line x1="16" y1="16" x2="16" y2="27"/>
+        <line x1="16" y1="16" x2="8.22" y2="23.78"/>
+        <line x1="16" y1="16" x2="5" y2="16"/>
+        <line x1="16" y1="16" x2="8.22" y2="8.22"/>
+        <line x1="16" y1="16" x2="16" y2="5"/>
+        <line x1="16" y1="16" x2="23.78" y2="8.22"/>
+      </g>
+      <!-- thin rim (the wheel) -->
+      <circle cx="16" cy="16" r="12" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <!-- thick left arc: opens to the right so the rim reads as a "C" -->
+      <path d="M22.88 25.83 A12 12 0 1 1 22.88 6.17" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <!-- hub -->
+      <circle cx="16" cy="16" r="2.2" fill="currentColor"/>
+    </svg>
+  </a>
+  <h1 id="route-title">Cyklocesta</h1>
+  <a href="about.html" id="about-link" class="site-about-link">O této stránce</a>
+</header>
+
+<!-- Map and the selected-route sidebar sit side by side (desktop) / stacked
+     (mobile). The sidebar is empty + hidden until a route is selected; while
+     hidden the map takes the full width. -->
+<div class="content-row">
+  <main id="map-wrap" class="map-wrap">
+    <div id="map"></div>
+
+    <!-- Shown when routes.json is missing/empty/unreachable, or a GPX fetch fails. -->
+    <div id="status-note" class="status-note" hidden></div>
+
+    <!-- Shown when no usable Mapy API key is configured; tiles are simply not added. -->
+    <div id="key-banner" class="key-banner" hidden>
+      <span id="key-banner-text">Map tiles disabled — configure a Mapy.com API key (see config.example.js)</span>
+      <button id="key-banner-close" class="key-banner-close" aria-label="Dismiss">&times;</button>
+    </div>
+  </main>
+
+  <!-- Selected-route panel. Right sidebar on desktop, bottom sheet on mobile.
+       Contents are built as DOM nodes in app.js (never innerHTML) so route
+       data can never inject markup. -->
+  <aside id="route-sidebar" class="route-sidebar" aria-label="Route details" hidden>
+    <button id="sidebar-close" class="sidebar-close" type="button" aria-label="Zavřít">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"
+           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="6" y1="6" x2="18" y2="18"/>
+        <line x1="18" y1="6" x2="6" y2="18"/>
+      </svg>
+    </button>
+    <h2 id="sidebar-name" class="sidebar-name"></h2>
+    <dl class="sidebar-stats">
+      <div class="sidebar-stat">
+        <dt>Vzdálenost</dt>
+        <dd id="sidebar-distance"></dd>
+      </div>
+      <div class="sidebar-stat">
+        <dt>Převýšení</dt>
+        <dd id="sidebar-elevation"></dd>
+      </div>
+    </dl>
+    <a id="download-gpx" class="sidebar-download" href="#" download>
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"
+           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="4" x2="12" y2="15"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="5" y1="19" x2="19" y2="19"/>
+      </svg>
+      <span>Stáhnout GPX</span>
+    </a>
+  </aside>
+</div>
+
+<!-- Config: prod key (committed) then dev override (gitignored, 404 on Pages is fine). -->
+<script src="config.js"></script>
+<script src="config.local.js" onerror="/* config.local.js is gitignored and absent on the deployed site — expected. */"></script>
+
+<script src="lib/leaflet/leaflet.js"></script>
+<script src="lib/markercluster/leaflet.markercluster.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

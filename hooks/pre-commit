@@ -1,0 +1,8 @@
+#!/bin/sh
+# Local git pre-commit privacy gate (CLAUDE.md ⛔ — installed by
+# pipeline/install_hooks.py, NEVER run in CI). Blocks a commit that
+# stages raw/done GPX, a .gpx outside gpx/, an in-zone point, or an
+# un-whitelisted GPX shape. See pipeline/privacy_gate.py for the logic.
+set -e
+REPO_ROOT=$(git rev-parse --show-toplevel)
+exec python3 "$REPO_ROOT/pipeline/privacy_gate.py" --staged

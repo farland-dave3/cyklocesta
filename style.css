@@ -1,0 +1,334 @@
+/* Cyklocesta — a plain header, then the map IS the index. */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Page header (in-flow, not sticky — the map fills the rest) -------- */
+.site-header {
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 10px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 16px;
+}
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  color: #1f7a4d;
+  text-decoration: none;
+  flex: none;
+}
+.site-logo:hover,
+.site-logo:focus-visible {
+  color: #145635;
+}
+.logo-wheel {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+.site-header h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+/* "O této stránce" link — sits at the far right of the header, alongside the
+   route stats/kebab group. Same green idiom as the logo. */
+.site-about-link {
+  flex: none;
+  color: #1f7a4d;
+  text-decoration: none;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.site-about-link:hover,
+.site-about-link:focus-visible {
+  color: #145635;
+  text-decoration: underline;
+}
+/* "O této stránce" pushed to the far right of the header. */
+.site-about-link {
+  margin-left: auto;
+}
+
+/* ---- Map + sidebar layout --------------------------------------------- */
+/* Below the header: map beside the route sidebar (desktop) / stacked with the
+   sidebar as a bottom sheet (mobile). */
+.content-row {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+/* Overlays (banners, notes) position against this wrapper, not the page.
+   flex:1 so the map fills whatever space the sidebar leaves. */
+.map-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ---- Selected-route sidebar ------------------------------------------- */
+.route-sidebar {
+  position: relative;
+  flex: none;
+  width: 320px;
+  box-sizing: border-box;
+  background: #fff;
+  border-left: 1px solid #e0e0e0;
+  padding: 20px;
+  overflow-y: auto;
+}
+.route-sidebar[hidden] {
+  display: none;
+}
+.sidebar-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: #666;
+  cursor: pointer;
+}
+.sidebar-close:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+.sidebar-close:focus-visible {
+  outline: 2px solid #1f7a4d;
+  outline-offset: 1px;
+}
+.sidebar-name {
+  margin: 0 40px 20px 0; /* clear the close button */
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1a1a1a;
+}
+.sidebar-stats {
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.sidebar-stat {
+  margin: 0;
+}
+.sidebar-stat dt {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 2px;
+}
+.sidebar-stat dd {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.sidebar-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  background: #1f7a4d;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+}
+.sidebar-download:hover {
+  background: #145635;
+}
+.sidebar-download:focus-visible {
+  outline: 2px solid #1f7a4d;
+  outline-offset: 2px;
+}
+
+/* Mobile: sidebar docks to the bottom as a sheet; the map keeps the top. */
+@media (max-width: 700px) {
+  .content-row {
+    flex-direction: column;
+  }
+  .route-sidebar {
+    width: auto;
+    max-height: 45vh;
+    border-left: none;
+    border-top: 1px solid #e0e0e0;
+  }
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* ---- Map route pins (brand divIcon: rest / hover / selected) ----------- */
+/* Neutralise Leaflet's default divIcon white box so only .route-pin__dot shows. */
+.route-pin {
+  background: transparent;
+  border: none;
+}
+.route-pin__dot {
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 2px; /* centres the 16px dot inside the 20px iconSize box */
+  border-radius: 50%;
+  background: #1f7a4d; /* brand green */
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+  transition: transform 0.12s ease, background-color 0.12s ease, box-shadow 0.12s ease;
+}
+/* Desktop hover: pure CSS on the real divIcon DOM. Touch has no :hover, and the
+   tooltip binding is also gated in app.js, so pins are untouched there. */
+.route-pin:hover .route-pin__dot {
+  transform: scale(1.25);
+  background: #26925d;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+/* Selected route's pin matches its orange polyline (#e6550d). */
+.route-pin.is-selected .route-pin__dot {
+  background: #e6550d;
+}
+.route-pin.is-selected:hover .route-pin__dot {
+  background: #ff6a1f;
+}
+
+/* Pin hover tooltip (distance · elevation) — dark pill, like the header bubble. */
+.pin-tooltip.leaflet-tooltip {
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+.pin-tooltip.leaflet-tooltip-top::before {
+  border-top-color: #333;
+}
+
+/* ---- Mapy logo control (mandatory attribution, see docs/mapy-api.md) ---- */
+.mapy-logo-control img {
+  display: block;
+  height: 30px;
+  min-height: 30px;
+}
+
+/* ---- No-key banner ------------------------------------------------------ */
+.key-banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #fff3cd;
+  color: #664d03;
+  border-bottom: 1px solid #ffe69c;
+  padding: 8px 40px 8px 12px;
+  font-size: 14px;
+  text-align: center;
+}
+.key-banner-close {
+  position: absolute;
+  right: 8px;
+  top: 4px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* ---- About page (about.html) ------------------------------------------- */
+/* The About page shares the header but not the map; content is a centered
+   readable column that scrolls normally (no absolute-positioned map here). */
+.about-main {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+.about-content {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+.about-content h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+.about-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  margin: 0 0 16px;
+}
+/* Mandatory Mapy attribution on the About page (no Leaflet control here, so
+   it is rendered inline). See docs/mapy-api.md / CLAUDE.md. */
+.about-attribution {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #666;
+}
+.about-attribution img {
+  display: block;
+  height: 24px;
+}
+.about-attribution a {
+  color: #1f7a4d;
+}
+
+/* ---- Status note (routes.json / GPX load problems, "no routes yet") ---- */
+.status-note {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  max-width: 90vw;
+  text-align: center;
+}
+
