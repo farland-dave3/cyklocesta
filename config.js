@@ -5,5 +5,5 @@
 // Placeholder until the prod key is created at deploy time (open-questions #2,
 // #18/#19: the referrer restriction needs the final domain first).
 window.APP_CONFIG = {
-  mapyKey: 'oNF6RNzZ04x7Y0_0qR7UhXPsQxU7UT3JvYegSvIKg08',
+  mapyKey: '_Sdm1JC4dy4x52_N3OHO_4j-4O7c5A9ACBDQfp0zDMI',
 };
