@@ -1,6 +1,28 @@
 {
   "routes": [
     {
+      "slug": "2026-07-10-jizda-tam-a-zpet-rybnik",
+      "file": "2026-07-10 Jízda tam a zpět Rybník.gpx",
+      "name": "Jízda tam a zpět Rybník",
+      "date": "2026-07-10",
+      "distance_km": 21.7,
+      "elevation_m": 512,
+      "pin": [
+        49.51996,
+        12.67539
+      ],
+      "bbox": [
+        [
+          49.50395,
+          12.61027
+        ],
+        [
+          49.56372,
+          12.67795
+        ]
+      ]
+    },
+    {
       "slug": "2026-07-06-vylet-okolo-rybnika",
       "file": "2026-07-06 Výlet okolo Rybníka.gpx",
       "name": "Výlet okolo Rybníka",
