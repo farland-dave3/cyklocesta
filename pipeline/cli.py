@@ -30,7 +30,7 @@ def cmd_report(args):
     raw_dir = Path(args.raw_dir)
     files = find_gpx_files(raw_dir)
     if not files:
-        print(f"No .gpx files found in {raw_dir}")
+        print(f"Adresar {raw_dir}/ je prazdny - nejsou v nem zadne .gpx soubory.")
         return 0
 
     print(f"{'file':<40} {'ride_date (Prague)':<20} {'points':>8} {'distance_km':>12}")
