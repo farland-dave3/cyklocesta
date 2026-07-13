@@ -23,6 +23,28 @@
       ]
     },
     {
+      "slug": "2026-07-07-jizda-tam-a-zpet-trhova-kamenice",
+      "file": "2026-07-07 Jízda tam a zpět Trhová Kamenice.gpx",
+      "name": "Jízda tam a zpět Trhová Kamenice",
+      "date": "2026-07-07",
+      "distance_km": 31.8,
+      "elevation_m": 511,
+      "pin": [
+        49.78262,
+        15.77521
+      ],
+      "bbox": [
+        [
+          49.78258,
+          15.76841
+        ],
+        [
+          49.83562,
+          15.87833
+        ]
+      ]
+    },
+    {
       "slug": "2026-07-06-vylet-okolo-rybnika",
       "file": "2026-07-06 Výlet okolo Rybníka.gpx",
       "name": "Výlet okolo Rybníka",
