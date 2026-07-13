@@ -1,15 +1,12 @@
 // Responsive: the selected route lives in a sidebar (right column on desktop,
 // bottom sheet on mobile). Both layouts show the same name/distance/elevation.
 const { test, expect } = require('@playwright/test');
-const { mockMapyTiles, readRoutesJson } = require('./helpers');
+const { mockMapyTiles, readRoutesJson, clickFirstRoutePin } = require('./helpers');
 
 async function selectFirstAndAssertSidebar(page, routes) {
   await page.goto('/index.html');
   await page.waitForTimeout(800);
-  await page.locator('.leaflet-marker-icon').nth(0).click();
-  await page.waitForTimeout(600);
-
-  const expected = routes.routes[0];
+  const expected = await clickFirstRoutePin(page, routes);
   await expect(page.locator('#route-sidebar')).toBeVisible();
   await expect(page.locator('#sidebar-name')).toHaveText(expected.name);
   await expect(page.locator('#sidebar-distance')).toContainText(String(expected.distance_km));

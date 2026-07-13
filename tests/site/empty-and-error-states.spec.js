@@ -43,7 +43,7 @@ test.describe('empty / error routes.json states', () => {
 
     await page.goto('/index.html');
     await page.waitForTimeout(800);
-    await page.locator('.leaflet-marker-icon').nth(0).click();
+    await page.locator('.route-pin').first().click();
     await page.waitForTimeout(800);
 
     expect(errors).toEqual([]);

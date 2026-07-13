@@ -5,7 +5,7 @@
 // only while a route is selected, correct href + download filename) and that
 // it disappears again on the overview.
 const { test, expect } = require('@playwright/test');
-const { mockMapyTiles, readRoutesJson } = require('./helpers');
+const { mockMapyTiles, readRoutesJson, clickFirstRoutePin } = require('./helpers');
 
 test.describe('sidebar: GPX download', () => {
   test('download is hidden on the overview, appears when a route is selected, and links to the route GPX', async ({ page }) => {
@@ -19,10 +19,8 @@ test.describe('sidebar: GPX download', () => {
     await expect(page.locator('#route-sidebar')).toBeHidden();
     await expect(page.locator('#download-gpx')).toBeHidden();
 
-    // Select the first route.
-    await page.locator('.leaflet-marker-icon').nth(0).click();
-    await page.waitForTimeout(600);
-    const expected = routes.routes[0];
+    // Select a route via a real pin click.
+    const expected = await clickFirstRoutePin(page, routes);
 
     // Download button now shown, points at the route's static file, and
     // downloads under the original YYYY-MM-DD Name.gpx filename.
@@ -41,7 +39,7 @@ test.describe('sidebar: GPX download', () => {
 
     await page.goto('/index.html');
     await page.waitForTimeout(800);
-    await page.locator('.leaflet-marker-icon').nth(0).click();
+    await page.locator('.route-pin').first().click();
     await page.waitForTimeout(600);
     await expect(page.locator('#download-gpx')).toBeVisible();
 
@@ -57,7 +55,7 @@ test.describe('sidebar: GPX download', () => {
 
     await page.goto('/index.html');
     await page.waitForTimeout(800);
-    await page.locator('.leaflet-marker-icon').nth(0).click();
+    await page.locator('.route-pin').first().click();
     await page.waitForTimeout(600);
     await expect(page.locator('#route-sidebar')).toBeVisible();
     const hashWhenOpen = await page.evaluate(() => location.hash);
@@ -74,7 +72,7 @@ test.describe('sidebar: GPX download', () => {
     expect(await page.evaluate(() => location.hash)).toBe(hashWhenOpen);
 
     // Re-clicking the same pin reopens the detail panel.
-    await page.locator('.leaflet-marker-icon').nth(0).click();
+    await page.locator('.route-pin.is-selected').click();
     await page.waitForTimeout(300);
     await expect(page.locator('#route-sidebar')).toBeVisible();
   });

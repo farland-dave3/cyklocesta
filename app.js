@@ -122,13 +122,23 @@
   // ---- State ----------------------------------------------------------------
   var routesBySlug = Object.create(null);
   var markersBySlug = Object.create(null);
-  var selectedMarker = null; // the pin currently drawn in the selected (orange) state
-  var clusterGroup = L.markerClusterGroup({ chunkedLoading: true });
+  var selectedMarker = null; // the pin currently drawn in the selected (red) state
+  // disableClusteringAtZoom 13 (= maxZoom 19 − 6): rides that start near each
+  // other (same trailhead, privacy-jittered pins a few hundred metres apart)
+  // must separate well before max zoom — with the default behaviour they only
+  // split around z16. Below z13 the default 80px radius keeps the
+  // country-level view tidy. spiderfyOnMaxZoom is moot once clusters can't
+  // exist at max zoom, so it's off per the markercluster docs.
+  var clusterGroup = L.markerClusterGroup({
+    chunkedLoading: true,
+    disableClusteringAtZoom: 13,
+    spiderfyOnMaxZoom: false,
+  });
   var currentPolyline = null;
   var currentSlug = null;
   var selectionToken = 0; // guards against out-of-order async responses on rapid clicks
 
-  // Highlight one pin (orange, matching its polyline) and revert the previous.
+  // Highlight one pin (red, against the orange rest pins) and revert the previous.
   // setIcon (not a DOM class toggle) so the state survives markercluster
   // rebuilding icons on zoom, and applies whenever the marker is next rendered.
   function setSelectedMarker(slug) {

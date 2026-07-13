@@ -202,7 +202,8 @@ body {
   height: 16px;
   margin: 2px; /* centres the 16px dot inside the 20px iconSize box */
   border-radius: 50%;
-  background: #1f7a4d; /* brand green */
+  background: #e6550d; /* accent orange (matches the route polyline) — brand
+                          green blended into forest tiles */
   border: 2px solid #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
   box-sizing: border-box;
@@ -212,15 +213,31 @@ body {
    tooltip binding is also gated in app.js, so pins are untouched there. */
 .route-pin:hover .route-pin__dot {
   transform: scale(1.25);
-  background: #26925d;
+  background: #ff6a1f;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
-/* Selected route's pin matches its orange polyline (#e6550d). */
+/* Selected route's pin goes red so it stands apart from the orange rest pins
+   (its polyline stays orange #e6550d). */
 .route-pin.is-selected .route-pin__dot {
-  background: #e6550d;
+  background: #d32f2f;
 }
 .route-pin.is-selected:hover .route-pin__dot {
-  background: #ff6a1f;
+  background: #e53935;
+}
+
+/* Cluster bubbles: override MarkerCluster.Default.css (its lime/yellow
+   defaults blend into forest tiles the same way the green pins did). */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background-color: rgba(230, 85, 13, 0.35);
+}
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+  background-color: rgba(230, 85, 13, 0.9);
+  color: #fff;
+  font-weight: 600;
 }
 
 /* Pin hover tooltip (distance · elevation) — dark pill, like the header bubble. */

@@ -1,6 +1,6 @@
 // #slug permalink: draws + zooms the route on direct load; unknown slug is a no-op.
 const { test, expect } = require('@playwright/test');
-const { mockMapyTiles, injectFakeMapyKey, readRoutesJson } = require('./helpers');
+const { mockMapyTiles, injectFakeMapyKey, readRoutesJson, totalRenderedPins } = require('./helpers');
 
 test.describe('permalink', () => {
   // Regression test for a cold-load permalink bug that was found and
@@ -64,8 +64,9 @@ test.describe('permalink', () => {
     // unknown slug.
     await expect(page.locator('#route-title')).toHaveText('Cyklocesta');
     await expect(page.locator('#route-sidebar')).toBeHidden();
-    // Default fit-all view still rendered all pins.
-    await expect(page.locator('.leaflet-marker-icon')).toHaveCount(routes.routes.length);
+    // Default fit-all view still renders every route — as its own pin or
+    // inside a cluster badge (close routes cluster at the fit-all zoom).
+    expect(await totalRenderedPins(page)).toBe(routes.routes.length);
   });
 
   test('same-hash re-selection (hash unchanged) still works via direct call path', async ({ page }) => {
